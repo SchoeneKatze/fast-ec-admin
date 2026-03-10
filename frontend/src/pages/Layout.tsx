@@ -8,7 +8,8 @@ import {
   Search, 
   Bell, 
   Settings,
-  LogOut
+  LogOut,
+  MessageSquare
 } from 'lucide-react';
 // import { View } from '../types';
 import { cn } from '../utils';
@@ -20,13 +21,14 @@ interface LayoutProps {
   onLogout: () => void;
 }
 
-type View = 'login' | 'dashboard' | 'products' | 'orders';
+type View = 'login' | 'dashboard' | 'products' | 'orders' | 'after-service';
 
 export default function Layout({ children, activeView, onViewChange, onLogout }: LayoutProps) {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'products', label: 'Products', icon: Package },
     { id: 'orders', label: 'Orders', icon: ShoppingCart },
+    { id: 'after-service', label: 'After Service', icon: MessageSquare },
     { id: 'users', label: 'Customers', icon: UsersIcon },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   ];
