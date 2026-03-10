@@ -1,0 +1,13 @@
+# 核心框架
+fastapi[all]
+uvicorn
+
+# 数据库 (ORM & 迁移)
+sqlalchemy
+pymysql        # 如果用 MySQL
+
+# 数据验证与日期处理
+pydantic[email]
+
+# 跨域支持 (已经内置在 fastapi 中，但需要这些库辅助)
+cors

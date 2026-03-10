@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # 后端管理 API
+  admin-backend:
+    build: ./backend
+    container_name: admin-backend-api
+    ports:
+      - "8001:8001"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+    networks:
+      - fast-ec-network
+
+  # 前端管理界面
+  admin-frontend:
+    build: ./frontend
+    container_name: admin-frontend-ui
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - admin-backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules # 避免本地 node_modules 覆盖容器内的
+    networks:
+      - fast-ec-network
+
+networks:
+  fast-ec-network:
+    driver: bridge
