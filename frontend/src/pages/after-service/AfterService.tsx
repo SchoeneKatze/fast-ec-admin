@@ -1,0 +1,1 @@
+export default function AfterService() {return <div>Coming Soon</div>}

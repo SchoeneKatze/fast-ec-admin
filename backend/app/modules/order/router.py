@@ -1,28 +1,32 @@
-from fastapi import APIRouter, Depends, HTTPException
-from requests import Session
-from app.modules.order import schemas, service
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy.orm import Session
 from app.core.database import get_db
+from .service import OrderService
+from .schemas import OrderListResponse
 
-router = APIRouter(prefix="/orders", tags=["Orders"])
+router = APIRouter(prefix="/api/orders", tags=["orders"])
 
-@router.post("/mock-pay")
-def mock_payment_and_create_order(order: schemas.OrderCreate, db: Session = Depends(get_db)):
-    new_order = service.create_order(db, order)
-    # 此处模拟发送邮件逻辑 send_order_email(user.email, new_order.order_no)
-    return {"status": "success", "order_no": new_order.order_no}
-
-@router.post("/create")
-async def create_order(order_data: schemas.OrderCreate, db: Session = Depends(get_db)):
+@router.get("", response_model=OrderListResponse)
+def get_orders(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=1000),
+    db: Session = Depends(get_db)
+):
     try:
-        # 调用 service 层处理复杂逻辑
-        new_order = service.create_order(db, order_data)
-        return {"status": "success", "order_no": new_order.order_no}
+        orders = OrderService.get_all_orders(db, skip=skip, limit=limit)
+        total = OrderService.get_order_count(db)
+        
+        return {
+            "status": "success",
+            "total": total,
+            "data": orders # Pydantic 会自动帮你把 Numeric 转成 float
+        }
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    
-@router.get("/order/{order_no}")
-async def get_order_by_no(order_no: str, db: Session = Depends(get_db)):
-    order = service.get_order_by_no(db, order_no)
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/{order_no}", response_model=dict)
+def get_order_detail(order_no: str, db: Session = Depends(get_db)):
+    order = OrderService.get_order_by_no(db, order_no)
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
-    return order
+    return {"status": "success", "data": order}

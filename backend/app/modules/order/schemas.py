@@ -1,20 +1,30 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import Optional, List
 from datetime import datetime
 
-class OrderItemCreate(BaseModel):
-    product_id: str
+class OrderItemSchema(BaseModel):
     product_name: str
-    image_url: str
     quantity: int
     unit_price: float
 
-class OrderCreate(BaseModel):
+    class Config:
+        from_attributes = True
+
+class OrderResponse(BaseModel):
+    id: int
+    order_no: str
     user_id: str
     currency: str
     total_price: float
-    items: List[OrderItemCreate]
+    status: str
+    tracking_number: Optional[str] = None
+    created_at: datetime
+    items: List[OrderItemSchema] = []
 
-class RefundCreate(BaseModel):
-    reason: str
-    details: Optional[str] = None
+    class Config:
+        from_attributes = True
+
+class OrderListResponse(BaseModel):
+    status: str
+    total: int
+    data: List[OrderResponse]

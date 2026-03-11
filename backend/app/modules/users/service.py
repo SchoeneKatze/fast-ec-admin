@@ -28,7 +28,7 @@ def login_and_register_user(login_data: schemas.LoginRequest, db: Session, user_
         email=login_data.email,
         nickname=login_data.email.split('@')[0],
         default_currency=currency_from_ip,
-        role='customer',
+        role='admin',
         created_at=datetime.now(),
         last_login=datetime.now(),
         isActive=True

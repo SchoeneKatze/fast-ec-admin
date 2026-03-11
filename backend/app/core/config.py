@@ -16,8 +16,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_BASE_URL}:{DB_PORT}/{DB_NAME}"
 
     # project metadata
-    PROJECT_NAME: str = "Fast EC App"
-    API_V1_STR: str = "/api/v1"
+    PROJECT_NAME: str = "Fast EC Admin"
 
     # load .env
     model_config = ConfigDict(env_file=".env")

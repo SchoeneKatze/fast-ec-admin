@@ -47,8 +47,6 @@ export default function Login({ onLogin }: LoginProps) {
                   <input 
                     type="email" 
                     className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-200 bg-[#f6f6f8] text-slate-900 focus:ring-2 focus:ring-[#21c45d]/20 focus:border-[#21c45d] outline-none transition-all"
-                    placeholder="admin@store.com"
-                    defaultValue="admin@store.com"
                   />
                 </div>
               </div>
@@ -64,8 +62,6 @@ export default function Login({ onLogin }: LoginProps) {
                   <input 
                     type={showPassword ? "text" : "password"}
                     className="w-full pl-10 pr-12 py-3 rounded-lg border border-slate-200 bg-[#f6f6f8] text-slate-900 focus:ring-2 focus:ring-[#21c45d]/20 focus:border-[#21c45d] outline-none transition-all"
-                    placeholder="••••••••"
-                    defaultValue="password123"
                   />
                   <button 
                     type="button"

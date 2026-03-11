@@ -1,18 +1,18 @@
-import React from 'react';
+// import React from 'react';
 import { 
   Users as UsersIcon, 
   Package, 
   ShoppingCart, 
-  TrendingUp, 
-  CreditCard, 
-  Clock, 
-  AlertTriangle,
-  Plus,
+  // TrendingUp, 
+  // CreditCard, 
+  // Clock, 
+  // AlertTriangle,
+  // Plus,
   ArrowRight,
-  ExternalLink
+  // ExternalLink,
+  MessageSquare
 } from 'lucide-react';
 import { motion } from 'motion/react';
-// import { View } from '../types';
 
 export type View = 'login' | 'dashboard' | 'products' | 'orders';
 
@@ -21,22 +21,23 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ onViewChange }: DashboardProps) {
-  const stats = [
-    { label: 'Active Users', value: '12,482', change: '+14% from last month', icon: TrendingUp, color: 'text-emerald-500', trend: 'up' },
-    { label: 'Daily Revenue', value: '$4,250', change: '+8% from yesterday', icon: CreditCard, color: 'text-emerald-500', trend: 'up' },
-    { label: 'Pending Orders', value: '48', change: '12 high priority', icon: Clock, color: 'text-amber-500', trend: 'neutral' },
-    { label: 'Stock Alerts', value: '3', change: 'Critical stock levels', icon: AlertTriangle, color: 'text-red-500', trend: 'down' },
-  ];
+  // const stats = [
+  //   { label: 'Active Users', value: '12,482', change: '+14% from last month', icon: TrendingUp, color: 'text-emerald-500', trend: 'up' },
+  //   { label: 'Daily Revenue', value: '$4,250', change: '+8% from yesterday', icon: CreditCard, color: 'text-emerald-500', trend: 'up' },
+  //   { label: 'Pending Orders', value: '48', change: '12 high priority', icon: Clock, color: 'text-amber-500', trend: 'neutral' },
+  //   { label: 'Stock Alerts', value: '3', change: 'Critical stock levels', icon: AlertTriangle, color: 'text-red-500', trend: 'down' },
+  // ];
 
   const modules = [
     { id: 'users', label: 'Users', desc: 'Customer accounts and permissions.', icon: UsersIcon, badge: 'Redirects to Logto' },
     { id: 'products', label: 'Products', desc: 'Manage inventory, pricing, and variants.', action: 'Manage Catalog' },
     { id: 'orders', label: 'Orders', desc: 'Process shipments and review transactions.', action: 'View Pipeline' },
+    { id: 'after-service', label: 'After Service', desc: 'Process refund requirements and claims.', action: 'Refund and claim' },
   ];
 
   return (
     <div className="p-4 md:p-8 max-w-[1100px] mx-auto w-full">
-      <div className="mb-10 text-center">
+      {/* <div className="mb-10 text-center">
         <motion.h1 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -47,7 +48,7 @@ export default function Dashboard({ onViewChange }: DashboardProps) {
         <p className="mt-4 text-lg text-slate-600">
           Select a module below to start managing your e-commerce ecosystem.
         </p>
-      </div>
+      </div> */}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {modules.map((mod, idx) => (
@@ -63,6 +64,7 @@ export default function Dashboard({ onViewChange }: DashboardProps) {
               {mod.id === 'users' && <UsersIcon size={36} />}
               {mod.id === 'products' && <Package size={36} />}
               {mod.id === 'orders' && <ShoppingCart size={36} />}
+              {mod.id === 'after-service' && <MessageSquare size={36} />}
             </div>
             <h3 className="text-xl font-bold mb-2">{mod.label}</h3>
             <p className="text-center text-sm text-slate-500">
@@ -78,14 +80,14 @@ export default function Dashboard({ onViewChange }: DashboardProps) {
                 {mod.action} <ArrowRight size={14} />
               </div>
             )}
-            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+            {/* <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
               <ExternalLink className="text-[#21c45d]" size={18} />
-            </div>
+            </div> */}
           </motion.button>
         ))}
       </div>
 
-      <div className="mt-16 grid grid-cols-1 lg:grid-cols-4 gap-6">
+      {/* <div className="mt-16 grid grid-cols-1 lg:grid-cols-4 gap-6">
         {stats.map((stat, idx) => (
           <motion.div
             key={stat.label}
@@ -111,11 +113,10 @@ export default function Dashboard({ onViewChange }: DashboardProps) {
           <Plus size={20} />
           Create Quick Report
         </button>
-      </div>
+      </div> */}
+
     </div>
+
   );
 }
 
-function cn(...inputs: any[]) {
-  return inputs.filter(Boolean).join(' ');
-}

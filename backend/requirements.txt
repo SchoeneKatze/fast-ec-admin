@@ -8,6 +8,20 @@ pymysql        # 如果用 MySQL
 
 # 数据验证与日期处理
 pydantic[email]
+pydantic-settings
 
 # 跨域支持 (已经内置在 fastapi 中，但需要这些库辅助)
 cors
+
+# 环境变量加载
+python-dotenv
+
+# HTTP 客户端
+httpx
+requests
+
+# 国家/货币转换
+pycountry-convert
+
+# 日期时间处理
+python-dateutil

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Plus, 
   // Search, 
@@ -13,25 +13,51 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../../utils';
+import { apiClient } from '../../api/apiClient';
 
 interface Product {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-  status: 'In Stock' | 'Low Stock' | 'Out of Stock';
+  product_id: string;
+  title: string;
+  category_id?: number;
+  base_price: number;
+  currency_code: string;
+  stock_quantity: number;
+  sku_internal_code?: string;
+  discount_factor?: number;
 }
 
-const INITIAL_PRODUCTS: Product[] = [
-  { id: 'PRD-9210', name: 'Premium Wireless Headphones', category: 'ELECTRONICS', price: 299.00, stock: 45, status: 'In Stock' },
-  { id: 'PRD-8821', name: 'Cotton Minimalist Tee', category: 'APPAREL', price: 35.00, stock: 8, status: 'Low Stock' },
-  { id: 'PRD-7412', name: 'Smart Watch Series 5', category: 'ELECTRONICS', price: 449.00, stock: 0, status: 'Out of Stock' },
-];
-
 export default function ProductInventory() {
-  const [products] = useState<Product[]>(INITIAL_PRODUCTS);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await apiClient.getProducts();
+        if (response?.data) {
+          setProducts(response.data);
+        } else {
+          setError('Failed to load products');
+        }
+      } catch (err) {
+        setError('Error loading products');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
+
+  const getStockStatus = (stock: number) => {
+    if (stock === 0) return 'Out of Stock';
+    if (stock < 10) return 'Low Stock';
+    return 'In Stock';
+  };
 
   return (
     <div className="flex flex-col p-4 md:p-8 min-h-full">
@@ -39,7 +65,7 @@ export default function ProductInventory() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Product Inventory</h1>
-          <p className="text-slate-500 text-sm">Review, update, and manage your store catalog.</p>
+          <p className="text-slate-500 text-sm">Total: {products.length} products</p>
         </div>
         <button 
           onClick={() => setIsModalOpen(true)}
@@ -50,7 +76,23 @@ export default function ProductInventory() {
         </button>
       </div>
 
-      {/* Filters & Search */}
+      {loading && (
+        <div className="flex items-center justify-center min-h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#21c45d] mx-auto mb-4"></div>
+            <p className="text-slate-600">Loading products...</p>
+          </div>
+        </div>
+      )}
+
+      {error && (
+        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+          {error}
+        </div>
+      )}
+
+      {!loading && (
+      <>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6 p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
         <div className="md:col-span-4 relative">
           <label className="text-[10px] font-bold text-slate-400 absolute left-3 top-1">SEARCH</label>
@@ -90,41 +132,41 @@ export default function ProductInventory() {
               <tr className="bg-slate-50 border-b border-slate-200">
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Product ID</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Name</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Category</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Price</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Stock Status</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Stock</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {products.map((product) => (
-                <tr key={product.id} className="hover:bg-slate-50 transition-colors group">
-                  <td className="px-6 py-4 text-sm font-medium text-slate-500">#{product.id}</td>
+                <tr key={product.product_id} className="hover:bg-slate-50 transition-colors group">
+                  <td className="px-6 py-4 text-sm font-medium text-slate-500">#{product.product_id}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-lg bg-slate-100 flex-shrink-0 flex items-center justify-center">
                         <ImageIcon className="text-slate-400" size={20} />
                       </div>
-                      <span className="text-sm font-semibold group-hover:text-[#21c45d] transition-colors">{product.name}</span>
+                      <span className="text-sm font-semibold group-hover:text-[#21c45d] transition-colors">{product.title}</span>
                     </div>
                   </td>
+                  <td className="px-6 py-4 text-sm font-bold">${product.base_price.toFixed(2)}</td>
                   <td className="px-6 py-4">
-                    <span className="px-2 py-1 bg-slate-100 rounded text-[11px] font-bold text-slate-600">{product.category}</span>
+                    <span className="text-sm font-semibold">{product.stock_quantity}</span>
                   </td>
-                  <td className="px-6 py-4 text-sm font-bold">${product.price.toFixed(2)}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <span className={cn(
                         "w-2 h-2 rounded-full",
-                        product.status === 'In Stock' ? 'bg-emerald-500' : 
-                        product.status === 'Low Stock' ? 'bg-amber-500' : 'bg-red-500'
+                        product.stock_quantity > 10 ? 'bg-emerald-500' : 
+                        product.stock_quantity > 0  ? 'bg-amber-500' : 'bg-red-500'
                       )}></span>
                       <span className={cn(
                         "text-xs font-semibold",
-                        product.status === 'In Stock' ? 'text-emerald-600' : 
-                        product.status === 'Low Stock' ? 'text-amber-600' : 'text-red-600'
+                        product.stock_quantity > 10 ? 'text-emerald-600' : 
+                        product.stock_quantity > 0 ? 'text-amber-600' : 'text-red-600'
                       )}>
-                        {product.status} ({product.stock})
+                        {getStockStatus(product.stock_quantity)}
                       </span>
                     </div>
                   </td>
@@ -240,6 +282,8 @@ export default function ProductInventory() {
           </div>
         )}
       </AnimatePresence>
+      </>
+      )}
     </div>
   );
 }

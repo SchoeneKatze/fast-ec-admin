@@ -1,16 +1,30 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
+from datetime import datetime
 
-class ProductCardResponse(BaseModel):
-    product_id: str
+class ProductBase(BaseModel):
     title: str
-    category_name: str
-    symbol: str
+    category_id: Optional[int] = None
     base_price: float
-    discount_rate: float
-    tax_rate: float
-    final_price: float
-    final_no_discount_price_for_show: float
-    stock_status: str
-    image_url: Optional[str]
-    is_show_inclusive: bool
+    currency_code: str = "USD"
+    stock_quantity: int = 0
+    sku_internal_code: Optional[str] = None
+    discount_factor: float = 1.0
+
+class ProductCreate(ProductBase):
+    product_id: str
+    description: Optional[str] = None
+    barcode: Optional[str] = None
+
+class ProductResponse(ProductBase):
+    product_id: str
+    created_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+# 专门给列表接口用的格式，符合前端 res.data 结构
+class ProductListResponse(BaseModel):
+    status: str
+    total: int
+    data: List[ProductResponse]
