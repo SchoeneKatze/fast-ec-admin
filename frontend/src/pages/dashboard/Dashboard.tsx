@@ -1,20 +1,20 @@
 // import React from 'react';
-import { 
-  Users as UsersIcon, 
-  Package, 
-  ShoppingCart, 
-  // TrendingUp, 
-  // CreditCard, 
-  // Clock, 
+import {
+  Users as UsersIcon,
+  Package,
+  ShoppingCart,
+  // TrendingUp,
+  // CreditCard,
+  // Clock,
   // AlertTriangle,
   // Plus,
   ArrowRight,
   // ExternalLink,
-  MessageSquare
-} from 'lucide-react';
-import { motion } from 'motion/react';
+  MessageSquare,
+} from "lucide-react";
+import { motion } from "motion/react";
 
-export type View = 'login' | 'dashboard' | 'products' | 'orders';
+export type View = "login" | "dashboard" | "products" | "orders";
 
 interface DashboardProps {
   onViewChange: (view: View) => void;
@@ -29,10 +29,31 @@ export default function Dashboard({ onViewChange }: DashboardProps) {
   // ];
 
   const modules = [
-    { id: 'users', label: 'Users', desc: 'Customer accounts and permissions.', icon: UsersIcon, badge: 'Redirects to Logto' },
-    { id: 'products', label: 'Products', desc: 'Manage inventory, pricing, and variants.', action: 'Manage Catalog' },
-    { id: 'orders', label: 'Orders', desc: 'Process shipments and review transactions.', action: 'View Pipeline' },
-    { id: 'after-service', label: 'After Service', desc: 'Process refund requirements and claims.', action: 'Refund and claim' },
+    {
+      id: "after-service",
+      label: "After Service",
+      desc: "Process refund requirements and claims.",
+      action: "Refund and claim",
+    },
+    {
+      id: "products",
+      label: "Products",
+      desc: "Manage inventory, pricing, and variants.",
+      action: "Manage Catalog",
+    },
+    {
+      id: "orders",
+      label: "Orders",
+      desc: "Process shipments and review transactions.",
+      action: "View Pipeline",
+    },
+    {
+      id: "users",
+      label: "Users",
+      desc: "Customer accounts and permissions.",
+      icon: UsersIcon,
+      badge: "Redirects to Logto",
+    },
   ];
 
   return (
@@ -61,15 +82,13 @@ export default function Dashboard({ onViewChange }: DashboardProps) {
             className="group relative flex flex-col items-center justify-center p-8 rounded-xl bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:border-[#21c45d]/50 transition-all duration-300"
           >
             <div className="mb-6 flex w-20 h-20 items-center justify-center rounded-2xl bg-[#21c45d]/10 text-[#21c45d] group-hover:bg-[#21c45d] group-hover:text-white transition-all duration-300">
-              {mod.id === 'users' && <UsersIcon size={36} />}
-              {mod.id === 'products' && <Package size={36} />}
-              {mod.id === 'orders' && <ShoppingCart size={36} />}
-              {mod.id === 'after-service' && <MessageSquare size={36} />}
+              {mod.id === "users" && <UsersIcon size={36} />}
+              {mod.id === "products" && <Package size={36} />}
+              {mod.id === "orders" && <ShoppingCart size={36} />}
+              {mod.id === "after-service" && <MessageSquare size={36} />}
             </div>
             <h3 className="text-xl font-bold mb-2">{mod.label}</h3>
-            <p className="text-center text-sm text-slate-500">
-              {mod.desc}
-            </p>
+            <p className="text-center text-sm text-slate-500">{mod.desc}</p>
             {mod.badge && (
               <div className="mt-4 px-3 py-1 rounded-full bg-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-500">
                 {mod.badge}
@@ -114,9 +133,6 @@ export default function Dashboard({ onViewChange }: DashboardProps) {
           Create Quick Report
         </button>
       </div> */}
-
     </div>
-
   );
 }
-
