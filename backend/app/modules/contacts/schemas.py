@@ -1,23 +1,35 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
-class ContactBase(BaseModel):
-    order_id: int
-    user_id: str
-    message: str
 
-class ContactCreate(ContactBase):
-    pass
+class OrderItemSchema(BaseModel):
+    product_name: str
+    quantity: int
+    unit_price: float
 
-class ContactUpdate(BaseModel):
-    status: Optional[str] = None
 
-class Contact(ContactBase):
+class OrderInfoSchema(BaseModel):
+    total_price: float
+    currency: str
+    status: str
+    items: List[OrderItemSchema]
+
+
+class TicketAdminResponse(BaseModel):
     id: int
+    ticket_type: str
+    order_id: str
+    user_id: str
+    reason: str
+    details: str
     status: str
     created_at: datetime
-    updated_at: datetime
+    order_info: Optional[OrderInfoSchema] = None
 
     class Config:
         from_attributes = True
+
+
+class StatusUpdate(BaseModel):
+    status: str

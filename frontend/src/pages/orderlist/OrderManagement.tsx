@@ -137,8 +137,8 @@ export default function OrderManagement() {
       {/* Header */}
       <div className="flex justify-between items-end mb-8">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight uppercase">
-            Order Management
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">
+            Order List
           </h1>
           <p className="text-slate-500 font-bold text-xs tracking-widest mt-1">
             {hasFilters

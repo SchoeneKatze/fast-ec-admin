@@ -1,18 +1,17 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Float
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from sqlalchemy.ext.declarative import declarative_base
+from app.core.database import Base
 
-Base = declarative_base()
 
-class Contact(Base):
-    __tablename__ = "contacts"
+class SupportTicket(Base):
+    __tablename__ = "support_tickets"
     id = Column(Integer, primary_key=True, index=True)
-    order_id = Column(Integer, ForeignKey("orders.id"))
+    ticket_type = Column(String(20))  # REFUND or CONTACT
+    order_id = Column(String(50))
     user_id = Column(String(50))
-    message = Column(Text, nullable=False)
-    status = Column(String(20), default="PENDING")  # PENDING, RESPONDED, CLOSED
+    reason = Column(String(200))
+    details = Column(Text)
+    status = Column(String(20), default="PENDING")  # PENDING, FINISHED, DENIED
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    order = relationship("Order", back_populates="contacts")
