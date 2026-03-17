@@ -15,7 +15,7 @@ const config: LogtoConfig = {
   endpoint: endpoint || 'https://xtt3qa.logto.app',
   appId: appId || 'kiqyn7rvlf1yg9orl70pg',
   scopes: ["profile", "email"],
-  redirectUri: `${window.location.origin}/`,
+  // redirectUri: `${window.location.origin}/`,
 };
 
 createRoot(document.getElementById('root')!).render(

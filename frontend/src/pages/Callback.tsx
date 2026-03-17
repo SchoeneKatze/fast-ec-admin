@@ -1,34 +1,19 @@
-import React, { useEffect } from 'react';
-import { useLogto } from "@logto/react";
+import { useEffect } from "react";
+import { useLogto, useHandleSignInCallback } from "@logto/react"; // 引入新的 Hook
 
 export default function Callback() {
-  const { isLoading, handleSignInCallback, isAuthenticated } = useLogto();
+  const { isAuthenticated } = useLogto();
+
+  const { isLoading } = useHandleSignInCallback(() => {
+    console.log("[Callback] handleSignInCallback completed");
+  });
 
   useEffect(() => {
-    console.log('🔐 [Callback] Component mounted - isLoading:', isLoading, 'isAuthenticated:', isAuthenticated);
-    
-    const completeSignIn = async () => {
-      try {
-        console.log('🔐 [Callback] Calling handleSignInCallback...');
-        await handleSignInCallback();
-        console.log('✅ [Callback] handleSignInCallback completed successfully');
-        
-        // Add small delay to ensure state is updated
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        console.log('🔐 [Callback] About to redirect to home');
-        window.location.href = '/';
-      } catch (error) {
-        console.error('❌ [Callback] handleSignInCallback failed:', error);
-        // Still redirect to home
-        window.location.href = '/';
-      }
-    };
-
-    if (!isLoading) {
-      completeSignIn();
+    if (!isLoading && isAuthenticated) {
+      console.log("[Callback] Authenticated, redirecting to home");
+      window.location.href = "/";
     }
-  }, [isLoading, handleSignInCallback]);
+  }, [isLoading, isAuthenticated]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#f6f6f8]">
