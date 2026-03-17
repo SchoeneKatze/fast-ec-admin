@@ -1,13 +1,14 @@
-# 核心框架
-fastapi[all]
-uvicorn
-
-# 数据库 (ORM & 迁移)
-sqlalchemy
-pymysql        # 如果用 MySQL
-
-# 数据验证与日期处理
-pydantic[email]
-
-# 跨域支持 (已经内置在 fastapi 中，但需要这些库辅助)
-cors
+fastapi==0.115.8
+uvicorn[standard]>=0.20.0
+pydantic[email]==2.10.6
+pydantic_settings==2.7.1
+sqlalchemy==2.0.37
+cryptography>=42.0.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.7
+pymysql>=1.1.2
+python-jose[cryptography]>=3.3.0
+python-dotenv==1.2.2 
+requests==2.32.5
+httpx==0.28.1
+pycountry_convert==0.7.2
