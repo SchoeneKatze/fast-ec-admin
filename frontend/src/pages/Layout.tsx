@@ -51,10 +51,11 @@ export default function Layout({
       <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-3 sticky top-0 z-30">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-3 text-[#21c45d]" onClick={backToHome} style={{ cursor: "pointer" }}>
-            <Package size={32} />
+            <Package size={28} />
             <h2 className="text-slate-900 text-lg font-bold leading-tight tracking-tight">
               Admin
             </h2>
+            <button className="pl-10 underline font-bold" onClick={backToHome} style={{ cursor: "pointer"}}>To Dashboard</button>
           </div>
           {/* {isAuthenticated && (
             <div className="hidden md:flex items-center gap-1 bg-slate-100 rounded-lg px-3 py-1.5 border border-slate-200">
@@ -83,7 +84,7 @@ export default function Layout({
               <div className="flex items-center gap-3">
                 <div className="text-right hidden sm:block">
                   {/* <p className="text-xs font-bold">Alex Rivera</p>
-                  <p className="text-[10px] text-slate-500">Store Manager</p> */}
+                  <p className="text-[12px] text-slate-500">Store Manager</p> */}
                   <p className="text-xs font-bold">Welcome, admin!</p>
                 </div>
                 {/* <div className="w-10 h-10 rounded-full flex items-center justify-center border-2 overflow-hidden bg-emerald-100 border-emerald-200">
@@ -141,7 +142,7 @@ export default function Layout({
               <div className="w-full bg-slate-200 h-1.5 rounded-full mb-2">
                 <div className="bg-[#21c45d] h-full w-[72%] rounded-full"></div>
               </div>
-              <p className="text-[10px] text-slate-500 font-medium">72% of 500GB used</p>
+              <p className="text-[12px] text-slate-500 font-medium">72% of 500GB used</p>
             </div>
           </aside>
         )} */}

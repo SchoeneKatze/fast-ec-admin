@@ -8,7 +8,7 @@ load_dotenv()
 from app.modules.users.router import router as user_router
 from app.modules.products.router import router as products_router
 from app.modules.order.router import router as order_router
-from app.modules.contacts.router import router as contacts_router
+from app.modules.afterService.router import router as contacts_router
 
 app = FastAPI(title="Fast-EC Admin API")
 

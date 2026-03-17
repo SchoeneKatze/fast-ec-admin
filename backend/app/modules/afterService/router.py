@@ -7,7 +7,7 @@ from typing import List, Optional
 router = APIRouter(prefix="/admin/tickets", tags=["Admin Tickets"])
 
 
-@router.get("/", response_model=List[schemas.TicketAdminResponse])
+@router.get("", response_model=List[schemas.TicketAdminResponse])
 def read_admin_tickets(
     order_no: Optional[str] = None,
     status: Optional[str] = None,

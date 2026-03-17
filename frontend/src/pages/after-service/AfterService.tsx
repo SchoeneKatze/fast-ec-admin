@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import {
   Search,
   //   Eye,
-  User,
+  // User,
   Package,
   X,
   RotateCcw,
@@ -15,11 +15,19 @@ interface OrderItem {
   unit_price: number;
 }
 
+interface AddressInfo {
+  tag: string;
+  recipient_name: string;
+  phone: string;
+  full_address: string;
+}
+
 interface Ticket {
   id: number;
   ticket_type: "REFUND" | "CONTACT";
   order_id: string;
   user_id: string;
+  user_email?: string;
   reason: string;
   details: string;
   status: "PENDING" | "FINISHED" | "DENIED";
@@ -29,6 +37,7 @@ interface Ticket {
     currency: string;
     status: string;
     items: OrderItem[];
+    address: AddressInfo | null;
   };
 }
 
@@ -158,7 +167,7 @@ export default function AfterService() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* 订单搜索 */}
           <div>
-            <label className="block text-[10px] font-black text-slate-400 uppercase mb-2">
+            <label className="block text-[12px] font-black text-slate-400 uppercase mb-2">
               Order No
             </label>
             <div className="relative">
@@ -181,12 +190,12 @@ export default function AfterService() {
           {/* 状态选择 + Reset */}
           <div>
             <div className="flex justify-between items-center mb-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase">
+              <label className="text-[12px] font-black text-slate-400 uppercase">
                 Status
               </label>
               <button
                 onClick={resetFilters}
-                className={`flex items-center gap-1 text-[10px] font-black uppercase ${hasFilters ? "text-rose-500 hover:text-rose-700" : "text-slate-200"}`}
+                className={`flex items-center gap-1 text-[12px] font-black uppercase ${hasFilters ? "text-rose-500 hover:text-rose-700" : "text-slate-200"}`}
                 disabled={!hasFilters}
               >
                 <RotateCcw size={10} /> Reset
@@ -208,13 +217,13 @@ export default function AfterService() {
 
           {/* 日期范围 (新增) */}
           <div>
-            <label className="block text-[10px] font-black text-slate-400 uppercase mb-2">
+            <label className="block text-[12px] font-black text-slate-400 uppercase mb-2">
               Request Date
             </label>
             <div className="flex gap-2">
               <input
                 type="date"
-                className="w-full h-10 px-2 rounded-lg bg-slate-50 border border-slate-200 text-[10px] font-bold"
+                className="w-full h-10 px-2 rounded-lg bg-slate-50 border border-slate-200 text-[12px] font-bold"
                 value={filters.start_date}
                 onChange={(e) =>
                   setFilters({ ...filters, start_date: e.target.value })
@@ -222,7 +231,7 @@ export default function AfterService() {
               />
               <input
                 type="date"
-                className="w-full h-10 px-2 rounded-lg bg-slate-50 border border-slate-200 text-[10px] font-bold"
+                className="w-full h-10 px-2 rounded-lg bg-slate-50 border border-slate-200 text-[12px] font-bold"
                 value={filters.end_date}
                 onChange={(e) =>
                   setFilters({ ...filters, end_date: e.target.value })
@@ -233,7 +242,7 @@ export default function AfterService() {
 
           {/* 金额范围 */}
           <div>
-            <label className="block text-[10px] font-black text-slate-400 uppercase mb-2">
+            <label className="block text-[12px] font-black text-slate-400 uppercase mb-2">
               Price Range
             </label>
             <div className="flex gap-2">
@@ -265,19 +274,19 @@ export default function AfterService() {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50 border-b">
-              <th className="p-4 text-[10px] font-black uppercase text-slate-400">
+              <th className="p-4 text-[12px] font-black uppercase text-slate-400">
                 Type
               </th>
-              <th className="p-4 text-[10px] font-black uppercase text-slate-400">
+              <th className="p-4 text-[12px] font-black uppercase text-slate-400">
                 Order No
               </th>
-              <th className="p-4 text-[10px] font-black uppercase text-slate-400">
+              <th className="p-4 text-[12px] font-black uppercase text-slate-400">
                 Total Price
               </th>
-              <th className="p-4 text-[10px] font-black uppercase text-slate-400">
+              <th className="p-4 text-[12px] font-black uppercase text-slate-400">
                 Date
               </th>
-              <th className="p-4 text-[10px] font-black uppercase text-slate-400">
+              <th className="p-4 text-[12px] font-black uppercase text-slate-400">
                 Status
               </th>
             </tr>
@@ -294,7 +303,7 @@ export default function AfterService() {
               >
                 <td className="p-4">
                   <span
-                    className={`text-[10px] font-black px-2 py-1 rounded-md ${ticket.ticket_type === "REFUND" ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600"}`}
+                    className={`text-[12px] font-black px-2 py-1 rounded-md ${ticket.ticket_type === "REFUND" ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600"}`}
                   >
                     {ticket.ticket_type}
                   </span>
@@ -303,9 +312,9 @@ export default function AfterService() {
                   #{ticket.order_id}
                 </td>
                 <td className="p-4 text-sm font-black text-slate-900">
-                  ${ticket.order_info?.total_price.toFixed(2)}
+                  ${ticket.order_info?.total_price ?? 0}
                 </td>
-                <td className="p-4 text-[10px] font-bold text-slate-400">
+                <td className="p-4 text-[12px] font-bold text-slate-400">
                   {new Date(ticket.created_at).toLocaleDateString()}
                 </td>
                 <td className="p-4">
@@ -326,9 +335,9 @@ export default function AfterService() {
       {selectedTicket && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col animate-in fade-in zoom-in duration-200">
-            <div className="p-6 border-b flex justify-between items-center bg-slate-50">
-              <div>
-                <h2 className="text-xl font-black uppercase italic">
+            <div className="p-1 border-b flex justify-between items-center bg-slate-50">
+              <div className="pl-8">
+                <h2 className="text-m font-black">
                   Order ID: {selectedTicket.order_id}
                 </h2>
               </div>
@@ -337,7 +346,7 @@ export default function AfterService() {
                   setSelectedTicket(null);
                   setActionStatus("");
                 }}
-                className="p-2 hover:bg-slate-200 rounded-full transition-colors"
+                className="p-3 hover:bg-slate-200 rounded-full transition-colors"
               >
                 <X />
               </button>
@@ -345,37 +354,41 @@ export default function AfterService() {
             <div className="flex-1 overflow-y-auto p-8 grid grid-cols-1 md:grid-cols-2 gap-10">
               <div className="space-y-8">
                 <section>
-                  <h3 className="flex items-center text-xs font-black uppercase tracking-widest text-slate-400 mb-4">
-                    <User className="w-4 h-4 mr-2" /> Customer Info
-                  </h3>
-                  <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <p className="text-sm font-bold">
-                      User ID:{" "}
-                      <span className="text-slate-600">
-                        {selectedTicket.user_id}
-                      </span>
-                    </p>
-                    <p className="text-sm mt-2">
-                      Reason: {selectedTicket.reason}
-                    </p>
-                    <p className="text-sm font-bold mt-4 text-slate-400 uppercase">
-                      Details:
-                    </p>
-                    <div className="text-sm bg-white p-3 rounded-xl border mt-1 min-h-[100px]">
-                      {selectedTicket.details}
-                    </div>
-                  </div>
-                </section>
-                {/* 详情弹窗 (Modal) 内部修改 */}
-                <section>
-                  <h3 className="flex items-center text-xs font-black uppercase tracking-widest text-slate-400 mb-4">
-                    Update Status
-                  </h3>
-                  <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-4">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase text-slate-400">
-                        Select Action
+                  <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-4">
+                    {selectedTicket.order_info?.address && (
+                      <div>
+                        <div className="mt-1 flex items-center gap-2 mb-1">
+                          <span className="bg-black text-white text-[9px] px-1.5 py-0.5 rounded font-black uppercase">
+                            {selectedTicket.order_info.address.tag}
+                          </span>
+                          <span className="text-sm">
+                            {selectedTicket.order_info.address.recipient_name}
+                          </span>
+                        </div>
+                        <p className="text-sm leading-relaxed">
+                          {selectedTicket.order_info.address.full_address}
+                        </p>
+                        <p className="text-sm mt-1">
+                          Tel: {selectedTicket.order_info.address.phone}
+                        </p>
+                        <p className="text-sm text-slate-900">
+                          Email:{" "}
+                          {selectedTicket.user_email || "No Email Provided"}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* 问题描述行 */}
+                    <div>
+                      <label className="text-xs font-black">
+                        Reason: {selectedTicket.reason}
                       </label>
+                      <div className="text-sm bg-white p-3 rounded-xl border mt-1 text-slate-600 leading-relaxed">
+                        {selectedTicket.details}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
                       <select
                         className="w-full h-12 px-4 rounded-xl border-2 border-white bg-white shadow-sm outline-none text-sm font-bold focus:border-black transition-all"
                         // 我们需要一个临时状态来控制提交按钮，请在组件顶部定义：
@@ -383,7 +396,7 @@ export default function AfterService() {
                         value={actionStatus}
                         onChange={(e) => setActionStatus(e.target.value)}
                       >
-                        <option value="">--- (Select)</option>
+                        <option value="">--- (Select Action)</option>
                         <option value="FINISHED">FINISHED</option>
                         {/* 仅当类型为 REFUND 时显示 DENIED */}
                         {selectedTicket.ticket_type === "REFUND" && (
@@ -420,14 +433,16 @@ export default function AfterService() {
                         key={idx}
                         className="flex justify-between items-center p-3 bg-white border-2 border-slate-50 rounded-xl hover:border-slate-100 transition-all"
                       >
-                        <div className="text-sm font-bold">
-                          {item.product_name}{" "}
-                          <span className="text-slate-400 font-medium">
-                            x{item.quantity}
+                        <div className="flex flex-col">
+                          <span className="text-sm font-bold text-slate-900">
+                            {item.product_name}
+                          </span>
+                          <span className="text-[12px] text-slate-400 font-bold uppercase">
+                            ${item.unit_price ?? 0} x {item.quantity ?? 0}
                           </span>
                         </div>
-                        <div className="text-sm font-black">
-                          ${item.unit_price * item.quantity}
+                        <div className="text-sm font-black text-slate-900">
+                          ${(item.unit_price ?? 0) * (item.quantity ?? 0)}
                         </div>
                       </div>
                     ))}
@@ -435,8 +450,8 @@ export default function AfterService() {
                       <span className="text-sm font-black uppercase tracking-widest text-slate-400">
                         Total
                       </span>
-                      <span className="text-2xl font-black italic">
-                        ${selectedTicket.order_info?.total_price}
+                      <span className="text-2xl font-black italic text-slate-900">
+                        ${selectedTicket.order_info?.total_price ?? 0}
                       </span>
                     </div>
                   </div>

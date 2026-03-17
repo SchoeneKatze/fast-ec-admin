@@ -90,7 +90,7 @@ export default function Dashboard({ onViewChange }: DashboardProps) {
             <h3 className="text-xl font-bold mb-2">{mod.label}</h3>
             <p className="text-center text-sm text-slate-500">{mod.desc}</p>
             {mod.badge && (
-              <div className="mt-4 px-3 py-1 rounded-full bg-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+              <div className="mt-4 px-3 py-1 rounded-full bg-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-500">
                 {mod.badge}
               </div>
             )}
